@@ -1,0 +1,517 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: easy-table 0.9\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-08-19 01:56+0700\n"
+"PO-Revision-Date: 2012-08-19 01:57+0700\n"
+"Last-Translator: takien <contact@takien.com>\n"
+"Language-Team: takien.com <contact@takien.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: easy-table.php:488
+#: New folder/easy-table.php:453
+msgid "Settings"
+msgstr ""
+
+#: easy-table.php:500
+#: New folder/easy-table.php:465
+msgid "Instruction"
+msgstr ""
+
+#: easy-table.php:501
+#: New folder/easy-table.php:466
+msgid "Once plugin installed, go to plugin options page to configure some options"
+msgstr ""
+
+#: easy-table.php:502
+#: New folder/easy-table.php:467
+msgid "You are ready to write a table in post or page."
+msgstr ""
+
+#: easy-table.php:503
+#: New folder/easy-table.php:468
+msgid "To be able write table in widget you have to check <em>Enable render table in widget</em> option in the option page."
+msgstr ""
+
+#: easy-table.php:522
+#: New folder/easy-table.php:487
+#, php-format
+msgid "%s Option"
+msgstr ""
+
+#: easy-table.php:523
+#: New folder/easy-table.php:488
+msgid "Support"
+msgstr ""
+
+#: easy-table.php:524
+#: New folder/easy-table.php:489
+msgid "About"
+msgstr ""
+
+#: easy-table.php:534
+#: New folder/easy-table.php:499
+msgid "Show/hide description"
+msgstr ""
+
+#: easy-table.php:535
+#: New folder/easy-table.php:500
+msgid "General options"
+msgstr ""
+
+#: easy-table.php:540
+#: New folder/easy-table.php:505
+msgid "Short code tag"
+msgstr ""
+
+#: easy-table.php:542
+#: New folder/easy-table.php:507
+msgid "Shortcode tag, type \"table\" if you want to use [table] short tag."
+msgstr ""
+
+#: easy-table.php:548
+#: easy-table.php:768
+#: New folder/easy-table.php:513
+#: folder/easy-table.php:718
+msgid "Cell attribute tag"
+msgstr ""
+
+#: easy-table.php:550
+#: New folder/easy-table.php:515
+msgid "Cell attribute tag, default is attr."
+msgstr ""
+
+#: easy-table.php:555
+#: New folder/easy-table.php:520
+msgid "Also render table in widget?"
+msgstr ""
+
+#: easy-table.php:557
+#: New folder/easy-table.php:522
+msgid "Check this if you want the table could be rendered in widget."
+msgstr ""
+
+#: easy-table.php:562
+#: New folder/easy-table.php:527
+msgid "Only load JS/CSS when in this condition"
+msgstr ""
+
+#: easy-table.php:563
+#: New folder/easy-table.php:528
+msgid "Please check in where JavaScript and CSS should be loaded"
+msgstr ""
+
+#: easy-table.php:567
+#: New folder/easy-table.php:532
+msgid "Single"
+msgstr ""
+
+#: easy-table.php:573
+#: New folder/easy-table.php:538
+msgid "Page"
+msgstr ""
+
+#: easy-table.php:579
+#: New folder/easy-table.php:544
+msgid "Front page"
+msgstr ""
+
+#: easy-table.php:585
+#: New folder/easy-table.php:550
+msgid "Archive page"
+msgstr ""
+
+#: easy-table.php:593
+msgid "Load script on footer?"
+msgstr ""
+
+#: easy-table.php:595
+msgid "Check this if you want the script to be rendered in footer. Try to check or uncheck this if you experienced conflict with another JavaScript library (not guaranteed though)."
+msgstr ""
+
+#: easy-table.php:606
+#: New folder/easy-table.php:562
+msgid "Use tablesorter?"
+msgstr ""
+
+#: easy-table.php:609
+#: New folder/easy-table.php:565
+msgid "Check this to use tablesorter jQuery plugin"
+msgstr ""
+
+#: easy-table.php:613
+#: New folder/easy-table.php:569
+msgid "Use TH for the first row?"
+msgstr ""
+
+#: easy-table.php:616
+#: New folder/easy-table.php:572
+msgid "Check this if you want to use first row as table head (required by tablesorter)"
+msgstr ""
+
+#: easy-table.php:620
+#: New folder/easy-table.php:576
+msgid "Load CSS?"
+msgstr ""
+
+#: easy-table.php:623
+#: New folder/easy-table.php:579
+msgid "Check this to use CSS included in this plugin to styling table, you may unceck if you want to write your own style."
+msgstr ""
+
+#: easy-table.php:627
+#: New folder/easy-table.php:583
+msgid "Table class"
+msgstr ""
+
+#: easy-table.php:629
+#: New folder/easy-table.php:585
+msgid "Additional table class attribute."
+msgstr ""
+
+#: easy-table.php:633
+#: New folder/easy-table.php:589
+msgid "Table width"
+msgstr ""
+
+#: easy-table.php:635
+#: New folder/easy-table.php:591
+msgid "Table width, in pixel or percent (may be overriden by CSS)"
+msgstr ""
+
+#: easy-table.php:639
+#: New folder/easy-table.php:595
+msgid "Table align"
+msgstr ""
+
+#: easy-table.php:641
+#: New folder/easy-table.php:597
+msgid "Table align, left/right/center (may be overriden by CSS)"
+msgstr ""
+
+#: easy-table.php:645
+#: New folder/easy-table.php:601
+msgid "Table border"
+msgstr ""
+
+#: easy-table.php:647
+#: New folder/easy-table.php:603
+msgid "Table border (may be overriden by CSS)"
+msgstr ""
+
+#: easy-table.php:652
+#: New folder/easy-table.php:608
+msgid "Table options"
+msgstr ""
+
+#: easy-table.php:656
+#: New folder/easy-table.php:612
+msgid "Theme selector"
+msgstr ""
+
+#: easy-table.php:661
+#: New folder/easy-table.php:617
+msgid "Default theme"
+msgstr ""
+
+#: easy-table.php:665
+#: New folder/easy-table.php:621
+msgid "Select default theme of the table"
+msgstr ""
+
+#: easy-table.php:671
+#: New folder/easy-table.php:627
+msgid "Parser Option"
+msgstr ""
+
+#: easy-table.php:672
+#: New folder/easy-table.php:628
+msgid "Do not change this unless you know what you're doing"
+msgstr ""
+
+#: easy-table.php:678
+msgid "New line replacement"
+msgstr ""
+
+#: easy-table.php:681
+msgid "Since new line is used by parser, you need specify character as a replacement."
+msgstr ""
+
+#: easy-table.php:684
+#: New folder/easy-table.php:634
+msgid "Delimiter"
+msgstr ""
+
+#: easy-table.php:687
+#: New folder/easy-table.php:637
+msgid "CSV delimiter (default is comma)"
+msgstr ""
+
+#: easy-table.php:690
+#: New folder/easy-table.php:640
+msgid "Enclosure"
+msgstr ""
+
+#: easy-table.php:693
+#: New folder/easy-table.php:643
+msgid "CSV enclosure (default is double quote)"
+msgstr ""
+
+#: easy-table.php:696
+#: New folder/easy-table.php:646
+msgid "Escape"
+msgstr ""
+
+#: easy-table.php:699
+#: New folder/easy-table.php:649
+msgid "CSV escape (default is backslash)"
+msgstr ""
+
+#: easy-table.php:702
+#: New folder/easy-table.php:652
+msgid "Allow read CSV from file?"
+msgstr ""
+
+#: easy-table.php:705
+#: New folder/easy-table.php:655
+msgid "Check this if you also want to convert CSV file to table"
+msgstr ""
+
+#: easy-table.php:713
+#: New folder/easy-table.php:663
+msgid "Save"
+msgstr ""
+
+#: easy-table.php:735
+#: New folder/easy-table.php:685
+msgid "Possible parameter"
+msgstr ""
+
+#: easy-table.php:736
+#: New folder/easy-table.php:686
+msgid "These parameters commonly can override global options in the left side of this page. Example usage:"
+msgstr ""
+
+#: easy-table.php:739
+#: easy-table.php:740
+#: easy-table.php:741
+#: easy-table.php:742
+#: easy-table.php:743
+#: easy-table.php:744
+#: easy-table.php:745
+#: easy-table.php:746
+#: easy-table.php:747
+#: easy-table.php:748
+#: easy-table.php:749
+#: New
+#: folder/easy-table.php:689
+#: folder/easy-table.php:690
+#: folder/easy-table.php:691
+#: folder/easy-table.php:692
+#: folder/easy-table.php:693
+#: folder/easy-table.php:694
+#: folder/easy-table.php:695
+#: folder/easy-table.php:696
+#: folder/easy-table.php:697
+#: folder/easy-table.php:698
+#: folder/easy-table.php:699
+msgid "default value"
+msgstr ""
+
+#: easy-table.php:739
+#: New folder/easy-table.php:689
+msgid "another value"
+msgstr ""
+
+#: easy-table.php:752
+#: New folder/easy-table.php:702
+msgid "parameter is for initial sorting order. Value for each column separated by comma. See example below:"
+msgstr ""
+
+#: easy-table.php:754
+#: New folder/easy-table.php:704
+msgid "Set initial order of first column descending and second column ascending:"
+msgstr ""
+
+#: easy-table.php:760
+#: New folder/easy-table.php:710
+msgid "Set initial order of second column descending:"
+msgstr ""
+
+#: easy-table.php:766
+#: New folder/easy-table.php:716
+msgid "Additionaly, sort option also can be set via sort attr in a cell. See example below"
+msgstr ""
+
+#: easy-table.php:770
+#: New folder/easy-table.php:720
+msgid "To set attribute for cell eg. class, colspan, rowspan, etc"
+msgstr ""
+
+#: easy-table.php:771
+#: New folder/easy-table.php:721
+msgid "Example"
+msgstr ""
+
+#: easy-table.php:780
+#: New folder/easy-table.php:730
+msgid "To set initial sort order, this is intended to TH (first row) only."
+msgstr ""
+
+#: easy-table.php:781
+#: New folder/easy-table.php:731
+msgid "Example: sort second column descending "
+msgstr ""
+
+#: easy-table.php:798
+#: New folder/easy-table.php:748
+msgid "Test area:"
+msgstr ""
+
+#: easy-table.php:803
+#: New folder/easy-table.php:753
+msgid "Reset"
+msgstr ""
+
+#: easy-table.php:804
+#: New folder/easy-table.php:754
+msgid "Update preview"
+msgstr ""
+
+#: easy-table.php:806
+#: New folder/easy-table.php:756
+msgid "Preview"
+msgstr ""
+
+#: easy-table.php:814
+#: New folder/easy-table.php:764
+msgid "I have tried to make this plugin can be used as easy as possible and documentation as complete as possible. However it is also possible that you are still confused. Therefore feel free to ask. I would be happy to answer."
+msgstr ""
+
+#: easy-table.php:815
+#: New folder/easy-table.php:765
+msgid "You can use this discussion to get support, request feature or reporting bug."
+msgstr ""
+
+#: easy-table.php:816
+#: New folder/easy-table.php:766
+msgid "Before you ask something, make sure you have read documentation here!"
+msgstr ""
+
+#: easy-table.php:875
+#: New folder/easy-table.php:825
+msgid "Install Now"
+msgstr ""
+
+#: easy-table.php:879
+#: New folder/easy-table.php:829
+msgid "Install Update Now"
+msgstr ""
+
+#: easy-table.php:882
+#: New folder/easy-table.php:832
+#, php-format
+msgid "Newer Version (%s) Installed"
+msgstr ""
+
+#: easy-table.php:885
+#: New folder/easy-table.php:835
+msgid "Latest Version Installed"
+msgstr ""
+
+#: easy-table.php:894
+#: New folder/easy-table.php:844
+msgid "Latest Version:"
+msgstr ""
+
+#: easy-table.php:896
+#: New folder/easy-table.php:846
+msgid "Author:"
+msgstr ""
+
+#: easy-table.php:898
+#: New folder/easy-table.php:848
+msgid "Last Updated:"
+msgstr ""
+
+#: easy-table.php:899
+#: New folder/easy-table.php:849
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: easy-table.php:901
+#: New folder/easy-table.php:851
+msgid "Requires WordPress Version:"
+msgstr ""
+
+#: easy-table.php:901
+#: New folder/easy-table.php:851
+#, php-format
+msgid "%s or higher"
+msgstr ""
+
+#: easy-table.php:903
+#: New folder/easy-table.php:853
+msgid "Compatible up to:"
+msgstr ""
+
+#: easy-table.php:905
+#: New folder/easy-table.php:855
+msgid "Downloaded:"
+msgstr ""
+
+#: easy-table.php:907
+#: New folder/easy-table.php:857
+msgid "WordPress.org Plugin Page &#187;"
+msgstr ""
+
+#: easy-table.php:909
+#: New folder/easy-table.php:859
+msgid "Plugin Homepage  &#187;"
+msgstr ""
+
+#: easy-table.php:913
+#: New folder/easy-table.php:863
+msgid "Average Rating"
+msgstr ""
+
+#: easy-table.php:931
+#: New folder/easy-table.php:881
+msgid "Support my work with donation"
+msgstr ""
+
+#: easy-table.php:940
+#: New folder/easy-table.php:890
+msgid "Don't have money? No problem, you can rate my plugin instead."
+msgstr ""
+
+#: easy-table.php:941
+#: New folder/easy-table.php:891
+msgid "Click here to rate"
+msgstr ""
+
+#: easy-table.php:943
+#: New folder/easy-table.php:893
+msgid "Thanks to"
+msgstr ""
+
+#: easy-table.php:949
+#: easy-table.php:950
+#: easy-table.php:951
+#: easy-table.php:952
+#: New folder/easy-table.php:899
+#: folder/easy-table.php:900
+#: folder/easy-table.php:901
+#: folder/easy-table.php:902
+msgid "by"
+msgstr ""
+
