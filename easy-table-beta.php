@@ -4,7 +4,7 @@ Plugin Name: Easy Table Beta
 Plugin URI: http://takien.com/
 Description: Create table in post, page, or widget in easy way. [This is beta version, use for testing only]
 Author: Takien
-Version: 1.0-beta
+Version: 1.0-beta2
 Author URI: http://takien.com/
 */
 
@@ -24,6 +24,9 @@ Author URI: http://takien.com/
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 /*
+Easy Table 1.0 beta2
++ Added nl2br if terminator is not \n nor \r
+
 Easy Table 1.0 beta
 Changelog:
 + Encoding fix (?)
@@ -45,31 +48,31 @@ class EasyTableBeta {
 * Default settings
 * Plugin will use this setting if user not made custom setting via settings page or tag.
 */
-var $settings 	= Array(
-	'shortcodetag'	=> 'tablebeta',
-	'attrtag'		=> 'attr',
-	'tablewidget'	=> false,
-	'scriptloadin'	=> Array('is_single','is_page'),
-	'class'			=> '',
-	'caption'		=> false,
-	'width'			=> '100%',
-	'align'			=> 'left',
-	'th'			=> true,
-	'tf'			=> false,
-	'border'		=> 0,
-	'id'			=> false,
-	'theme'			=> 'default',
-	'tablesorter' 	=> false,
-	'loadcss' 		=> true,
+var $settings = Array(
+	'shortcodetag'  => 'tablebeta',
+	'attrtag'       => 'attr',
+	'tablewidget'   => false,
+	'scriptloadin'  => Array('is_single','is_page'),
+	'class'         => '',
+	'caption'       => false,
+	'width'         => '100%',
+	'align'         => 'left',
+	'th'            => true,
+	'tf'            => false,
+	'border'        => 0,
+	'id'            => false,
+	'theme'         => 'default',
+	'tablesorter'   => false,
+	'loadcss'       => true,
 	'scriptinfooter'=> false,
-	'delimiter'		=> ',',
-	'file'			=> false,
-	'trim'			=> false, /*trim, since 1.0*/
-	'enclosure' 	=> '&quot;',
-	'escape' 		=> '\\',
+	'delimiter'     => ',',
+	'file'          => false,
+	'trim'          => false, /*trim, since 1.0*/
+	'enclosure'     => '&quot;',
+	'escape'        => '\\',
 	'nl'            => '~~',
-	'csvfile'		=> false,
-	'terminator'    => '\n', /*row terminator, since 1.0, Yes, it's '\n' not "\n"*/
+	'csvfile'       => false,
+	'terminator'    => "\n", /*row terminator, since 1.0*/
 	'limit'         => 0 /*max row to be included to table, 0 = unlimited, since 1.0*/
 );
 
@@ -84,7 +87,7 @@ function __construct(){
 	
 	load_plugin_textdomain('easy-table', false, basename( dirname( __FILE__ ) ) . '/languages' );
 	
-	add_action('admin_init', 		 array(&$this,'easy_table_admin_init'));
+	add_action('admin_init', 		 array(&$this,'easy_table_register_setting'));
 	add_action('admin_head',		 array(&$this,'easy_table_admin_script'));
 	add_action('wp_enqueue_scripts', array(&$this,'easy_table_script'));
 	add_action('wp_enqueue_scripts', array(&$this,'easy_table_style'));
@@ -325,8 +328,12 @@ ai head, text to shown in the table head row, default is No.
 			 /*trim cell content?
 			 @since 1.0
 			 */
-			$cell       = $trim ? trim($cell) : $cell;
+			$cell  = $trim ? trim($cell) : $cell;
 			
+			/*nl2br? only if terminator is not \n or \r*/
+			if(( '\n' !== $terminator )  OR ( '\r' !== $terminator )) {
+				$cell = nl2br($cell);
+			}
 			/*colalign
 			 @since 1.0
 			 */
@@ -463,16 +470,16 @@ function themes(){
 }
 
 /**
-* Register plugin setting etc.
+* Register plugin setting
 */
-function easy_table_admin_init() {
+function easy_table_register_setting() {
 	register_setting('easy_table_option_field', 'easy_table_beta_plugin_option');
-	
-	if(isset($_POST['easy_table_beta_reset_options'])){
-		delete_option('easy_table_beta_plugin_option');
-		wp_redirect('options-general.php?page='.$this->easy_table_base('plugin-domain').'&reset=1');
-		die();
-	}
+
+
+
+
+
+
 }
 
 /**
@@ -612,7 +619,7 @@ function easy_table_page() { ?>
 <h2 class="nav-tab-wrapper">
 	<a href="options-general.php?page=<?php echo $this->easy_table_base('plugin-domain');?>" class="nav-tab <?php echo !isset($_GET['gettab']) ? 'nav-tab-active' : '';?>"><?php printf(__('%s Option','easy-table'), $this->easy_table_base('name'));?></a>
 	<a href="options-general.php?page=<?php echo $this->easy_table_base('plugin-domain');?>&gettab=support" class="nav-tab <?php echo (isset($_GET['gettab']) AND ($_GET['gettab'] == 'support')) ? 'nav-tab-active' : '';?>"><?php _e('Support','easy-table');?></a>
-	<a href="options-general.php?page=<?php echo $this->easy_table_base('plugin-domain');?>&gettab=debug" class="nav-tab <?php echo (isset($_GET['gettab']) AND ($_GET['gettab'] == 'debug')) ? 'nav-tab-active' : '';?>"><?php _e('Debug','easy-table');?></a>
+
 	<a href="options-general.php?page=<?php echo $this->easy_table_base('plugin-domain');?>&gettab=about" class="nav-tab <?php echo (isset($_GET['gettab']) AND ($_GET['gettab'] == 'about')) ? 'nav-tab-active' : '';?>"><?php _e('About','easy-table');?></a>
 </h2>
 <?php if(!isset($_GET['gettab'])) : ?>
@@ -644,6 +651,7 @@ function easy_table_page() { ?>
 <?php 
 wp_nonce_field('update-options'); 
 settings_fields('easy_table_option_field');
+
 ?>
 	<span class="togglethis toggledesc"><em><a href="#" data-target=".description"><?php _e('Show/hide description');?></a></em></span>
 	<h3><?php _e('General options','easy-table');?></h3>
@@ -776,8 +784,9 @@ settings_fields('easy_table_option_field');
 			'type'			=> 'select',
 			'value'			=> $this->option('theme'),
 			'values'		=> array_combine($this->themes(),$this->themes()),
-			'description'	=> __('Select default theme of the table','easy-table'),
-			'attr'			=> $this->option('tablesorter') ? 'checked="checked"':'')
+			'description'	=> __('Select default theme of the table','easy-table')
+
+	)
 	);
 		echo $this->render_form($fields);
 	?>
@@ -855,8 +864,8 @@ settings_fields('easy_table_option_field');
 
 <input type="hidden" name="action" value="update" />
 <input type="hidden" name="easy_table_option_field" value="easy_table_beta_plugin_option" />
-<p><input type="submit" class="button-primary" value="<?php _e('Save','easy-table');?>" /> 
-<input class="button-secondary" type="submit" name="easy_table_beta_reset_options" value="<?php _e('Reset options','easy-table');?>" /></p>
+<p><input type="submit" class="button-primary" value="<?php _e('Save','easy-table');?>" /> </p>
+
 </form>
 </div>
 <div class="right">
@@ -1012,49 +1021,49 @@ col4,col5,col6
 })();
 /* ]]> */
 </script>
-<?php elseif($_GET['gettab'] == 'debug') : ?>
-
-<div class="easy-table-beta-admin-debug">
-	<h2>Debug Info</h2>
-	<p>Please attach the following info when you request support via Email. None of private data are collected. </p>
-	<form action="" method="post">
-	<textarea name="infoarea" class="info-area" >
-####### System Info #######
-
-WordPress version: <?php global $wp_version; echo $wp_version;?>
-
-WordPress language: <?php echo WPLANG;?>
-
-Current Theme: <?php echo wp_get_theme();?>
-
-DB Charset: <?php echo DB_CHARSET;?>
-
-PHP version: <?php echo phpversion();?>
-
-MySQL version: <?php echo  mysql_get_server_info();?>
 
 
-####### Saved options: #########
-
-<?php	print_r(get_option('easy_table_beta_plugin_option'));?>
-
-####### Active plugins: ########
-
-<?php $all_plugins = get_plugins();
-	foreach($all_plugins as $pluginfile => $plugininfo){
-		if(is_plugin_active($pluginfile)){
-			echo $plugininfo['Name'].' '.$plugininfo['Version']. ' ('.$plugininfo['PluginURI'].")\r\n";
-		}
-	}
 
 
-	?>
-	</textarea>
-	<h3>Additional Info</h3>
-	<textarea name="additional_info"></textarea>
-	<p><input type="submit" class="button-primary" name="save_info_txt" value="Save as Text"/></p>
-	</form>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <?php elseif ($_GET['gettab'] == 'about') : ?>
