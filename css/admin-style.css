@@ -3,9 +3,56 @@
 */
 @import url(easy-table.css);
 
+/* Use foundation zurb
+ * Requires: normalize.css */
+/* Global Reset & Standards ---------------------- */
+.easy-table-wrap *,.easy-table-wrap *:before,.easy-table-wrap *:after { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+/* The Grid ---------------------- */
+.row { width: 100%; max-width: 100%; min-width: 768px; margin: 0 auto; }
+.row .row { width: auto; max-width: none; min-width: 0; margin: 0 -15px; }
+.row.collapse .column, .row.collapse .columns { padding: 0; }
+.row .row { width: auto; max-width: none; min-width: 0; margin: 0 -15px; }
+.row .row.collapse { margin: 0; }
+
+.column, .columns { float: left; min-height: 1px; padding: 0 15px; position: relative; }
+.column.centered, .columns.centered { float: none; margin: 0 auto; }
+
+[class*="column"] + [class*="column"]:last-child { float: right; }
+
+[class*="column"] + [class*="column"].end { float: left; }
+
+.one, .row .one { width: 8.33333%; }
+.two, .row .two { width: 16.66667%; }
+.three, .row .three { width: 25%; }
+.four, .row .four { width: 33.33333%; }
+.five, .row .five { width: 41.66667%; }
+.six, .row .six { width: 50%; }
+.seven, .row .seven { width: 58.33333%; }
+.eight, .row .eight { width: 66.66667%; }
+.nine, .row .nine { width: 75%; }
+.ten, .row .ten { width: 83.33333%; }
+.eleven, .row .eleven { width: 91.66667%; }
+.twelve, .row .twelve { width: 100%; }
+
+/* Nicolas Gallagher's micro clearfix */
+.row { *zoom: 1; }
+.row:before, .row:after { content: " "; display: table; }
+.row:after { clear: both; }
+
+
 .toggledesc{
 	float:right;
 	margin-right:20px;
+}
+.help-btn {
+	text-decoration:none;
+	display:inline-block;
+	width:20px;
+	height:20px;
+	color:#666;
+	text-align:center;
+	border:1px solid #ccc;
 }
 .action-button{
 	margin-bottom:20px
@@ -47,13 +94,24 @@
 /*since 1.0
 
 */
-.wrap .form-table tr.beta label,
-.wrap .form-table tr.beta .description,
-.wrap .form-table tr.beta p,
-.wrap .beta 
+.wrap .form-table tr.new label,
+.wrap .form-table tr.new .description,
+.wrap .form-table tr.new p,
+.wrap .new 
  {
-	color:red !important
+	/* color:green !important */
 }
+#easy-table-theme-editor {
+	width:100%;
+	min-height:400px;
+	font-family: Consolas,Monaco,monospace;
+    font-size: 12px;
+	background: none repeat scroll 0% 0% rgb(249, 249, 249);
+    outline: 0px none;
+}
+
+
+
 @media (min-width:1024px) {
 	.left,
 	.right{
@@ -65,15 +123,4 @@
 	span.description {
 		display:block;
 	}
-}
-
-.easy-table-beta-admin-debug textarea{
-	width:100%;
-	max-width:100%;
-	min-width:100%;
-	min-height:150px;
-	font-family:monospace
-}
-.easy-table-beta-admin-debug textarea.info-area{
-	min-height:500px;
 }

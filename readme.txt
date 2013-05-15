@@ -3,8 +3,8 @@ Contributors: takien
 Donate link: http://takien.com/donate
 Tags: table,csv,csv-to-table,post,excel,csv file,widget,tablesorter
 Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 0.9
+Tested up to: 3.5.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,7 @@ Year,Make,Model,Length
 
 * Table with colspan and other attribute in some cells
 `[table]
-no[attr width="20"],head1,head2,head3
+no[attr style="width:20px"],head1,head2,head3
 1,row1col1,row1col2,row1col3[attr class="someclass"]
 2,row2col1,row2col2,row2col3
 3,row3col1[attr colspan="2"],row3col3
@@ -148,6 +148,27 @@ row3col1,row3col2,row3col3
 row4col1,row4col2,row4col3
 [/table]`
 
+* Table with custom row terminator (since 1.0)
+Now you can use another character as new row, not only linebreak (\n or \n), eg. you want to use | as row terminator.
+
+`[table terminator="|"]
+head1,head2,head3|
+row1col1,row1col2,this
+should
+be
+in
+one cell|
+row2col1,row2col2,this
+also
+should
+be
+in
+one
+cell|
+row3col1,row3col2,row3col3|
+row4col1,row4col2,row4col3|
+[/table]`
+
 * Table with no heading
 `[table th="0"]some data here[/table]`
 
@@ -193,6 +214,28 @@ There are many ways to install this plugin, e.g:
 No
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed bug custom terminator doesn't work on version 1.1
+* Removed align field on Option page
+
+= 1.1 = 
+* Removed: .htaccess from plugin directory (Fixed unloaded script on some servers)
+* Use dedicated str_getcsv for Easy Table (Fixed incompatibility issue with AIOSP version 2.0)
+* Removed: align attribute on table (Fixed text wrap issue)
+* Added: new theme "minimal"
+
+= 1.0 =
++ Encoding fix
+* Added colalign param
+* Added colwidth param
+* Added style param
+* Added limit param
+* Added trim param
+* Added terminator param
+* Added nl2br if terminator is not \n nor \r
+* Added is_search conditional option to load CSS/JS
+* Improved admin UI, field description is now using tTooltip
 
 = 0.9 =
 * Fixed: Allow empty cell (was stripped on PHP prior to 5.3)
