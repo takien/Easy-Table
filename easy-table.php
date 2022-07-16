@@ -4,7 +4,7 @@ Plugin Name: Easy Table
 Plugin URI: http://takien.com/
 Description: Create table in post, page, or widget in easy way.
 Author: Takien
-Version: 1.1.1
+Version: 1.5.3
 Author URI: http://takien.com/
 */
 
@@ -19,9 +19,6 @@ Author URI: http://takien.com/
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
-    For a copy of the GNU General Public License, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 if(!defined('ABSPATH')) die();
@@ -42,6 +39,7 @@ var $settings = Array(
 	'class'         => '',
 	'caption'       => false,
 	'width'         => '100%',
+	'align'         => 'left',
 	'th'            => true,
 	'tf'            => false,
 	'border'        => 0,
@@ -53,18 +51,14 @@ var $settings = Array(
 	'delimiter'     => ',',
 	'file'          => false,
 	'trim'          => false, /*trim, since 1.0*/
-	'enclosure'     => '&quot;',
+	'enclosure'     => '\n',
 	'escape'        => '\\',
 	'nl'            => '~~',
 	'csvfile'       => false,
 	'terminator'    => '\n', /*row terminator, since 1.0*/
-	'limit'         => 0 /*max row to be included to table, 0 = unlimited, since 1.0*/
+	'limit'         => 0, /*max row to be included to table, 0 = unlimited, since 1.0*/
+	'fixlinebreak'  => false
 );
-
-
-function EasyTable(){
-	$this->__construct();
-}
 
 function __construct(){
 	$plugin = plugin_basename(__FILE__);
@@ -78,46 +72,98 @@ function __construct(){
 	add_action('wp_enqueue_scripts', array(&$this,'easy_table_style'));
 	add_action('admin_menu', 		 array(&$this,'easy_table_add_page'));
 	add_action('contextual_help', 	 array(&$this,'easy_table_help'));
-	add_shortcode($this->option('shortcodetag'),  array(&$this,'easy_table_short_code'));
-	add_shortcode($this->option('attrtag'),  array(&$this,'easy_table_short_code_attr'));
+	
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	include_once( dirname(__FILE__) . '/inc/compatibility.php' ); /* since 1.5.2 */
+	
+	$conflict = false;
+	
+	if ( shortcode_exists( $this->option('shortcodetag') ) ) {
+		add_action('admin_notices',       array(&$this,'easy_table_shortcode_check_notice'));
+		$conflict = true;
+	}
+	if (is_plugin_active('tablepress/tablepress.php') AND ('table' == strtolower($this->option('shortcodetag')) ) ) {
+		add_action('admin_notices',       array(&$this,'easy_table_shortcode_check_notice_tablepress'));
+		$conflict = true;
+	}
+	if ( !$conflict ) {
+		add_shortcode($this->option('shortcodetag'),  array(&$this,'easy_table_short_code'));
+	}
+	
+	if ( shortcode_exists( $this->option('attrtag') ) ) {
+		add_action('admin_notices',       array(&$this,'easy_table_attr_shortcode_check_notice'));
+	}
+	else {
+		add_shortcode($this->option('attrtag'),  array(&$this,'easy_table_short_code_attr'));
+	}
+	
 	if($this->option('tablewidget')){
 		add_filter('widget_text', 		'do_shortcode');
 	}
+	$table_shortcodetag_already_exists = false;
 }
 
 private function easy_table_base($return){
 	$easy_table_base = Array(
 				'name' 			=> 'Easy Table',
-				'version' 		=> '1.1.1',
+				'version' 		=> '1.5.3',
 				'plugin-domain'	=> 'easy-table'
 	);
 	return $easy_table_base[$return];
 }
 
+
+function easy_table_shortcode_check_notice() {
+	$shortcode = $this->option('shortcodetag');
+	?>
+	<div class="error">
+		<p><strong>Easy Table</strong>: <?php printf(__('It seems that %1$s shortcode already used by another plugin and potentially cause problem with %2$s. Please change %3$s into another term other than %4$s.  <a href="%5$s">Click here to fix it.</a>','easy-table'), '<code>['.$shortcode.']</code>','Easy Table','<em>Easy Table short code tag</em>','<code>'.$shortcode.'</code>','options-general.php?page=easy-table');?></p>
+	</div>
+	<?php 
+}
+function easy_table_shortcode_check_notice_tablepress() {
+	$shortcode = 'table';
+	?>
+	<div class="error">
+		<p><strong>Easy Table</strong>: <?php printf(__('It seems that %1$s shortcode already used by another plugin and potentially cause problem with %2$s. Please change %3$s into another term other than %4$s.  <a href="%5$s">Click here to fix it.</a>','easy-table'), '<code>['.$shortcode.']</code>','Easy Table','<em>Easy Table short code tag</em>','<code>'.$shortcode.'</code>','options-general.php?page=easy-table');?></p>
+	</div>
+	<?php 
+}
+function easy_table_attr_shortcode_check_notice() {
+	$shortcode = $this->option('attrtag');
+	?>
+	<div class="error">
+		<p><strong>Easy Table</strong>: <?php printf(__('It seems that %1$s shortcode already used by another plugin and potentially cause problem with %2$s. Please change %3$s into another term other than %4$s.  <a href="%5$s">Click here to fix it.</a>','easy-table'), '<code>['.$shortcode.']</code>','Easy Table','<em>Easy Table cell attribute tag</em>','<code>'.$shortcode.'</code>','options-general.php?page=easy-table');?></p>
+	</div>
+	<?php 
+}
+
 function easy_table_short_code($atts, $content="") {
 	$shortcode_atts = shortcode_atts(array(
-		'class' 		=> $this->option('class'),
-		'caption' 		=> $this->option('caption'),
-		'width' 		=> $this->option('width'),
-		'th'	  		=> $this->option('th'),
-		'tf'	  		=> $this->option('tf'),
-		'border'		=> $this->option('border'),
-		'id'	  		=> $this->option('id'),
-		'theme'			=> $this->option('theme'),
-		'tablesorter'	=> $this->option('tablesorter'),
-		'delimiter'		=> $this->option('delimiter'),
-		'enclosure' 	=> $this->option('enclosure'),
-		'escape' 		=> $this->option('escape'),
-		'file'			=> $this->option('file'),
-		'trim'			=> $this->option('trim'), 
+		'class'         => $this->option('class'),
+		'caption'       => $this->option('caption'),
+		'width'         => $this->option('width'),
+		'th'            => $this->option('th'),
+		'tf'            => $this->option('tf'),
+		'border'        => $this->option('border'),
+		'id'            => $this->option('id'),
+		'theme'         => $this->option('theme'),
+		'tablesorter'   => $this->option('tablesorter'),
+		'delimiter'     => $this->option('delimiter'),
+		'enclosure'     => $this->option('enclosure'),
+		'escape'        => $this->option('escape'),
+		'file'          => $this->option('file'),
+		'trim'          => $this->option('trim'), 
 		'sort'          => '',
 		'nl'            => $this->option('nl'),
 		'ai'            => false,
-		'terminator'	=> $this->option('terminator'),
-		'limit'	        => $this->option('limit'),
-		'style'	        => '', /*table inline style, since 1.0*/
+		'terminator'    => $this->option('terminator'),
+		'limit'         => $this->option('limit'),
+		'align'         => $this->option('align'),
+		'style'         => '', /*table inline style, since 1.0*/
 		'colalign'      => '', /*column align, ex: [table colalign="left|right|center"], @since 1.0*/
 		'colwidth'      => '', /*column width, ex: [table colwidth="100|200|300"], @since 1.0*/
+		'fixlinebreak'  => $this->option('fixlinebreak') /* fix linebreak on cell if terminator is not \n or \r @since 1.1.4 */
 	 ), $atts);
 	/**
 	* because clean_pre is deprecated since WordPress 3.4, then replace it manually
@@ -187,7 +233,7 @@ private function csv_to_table($data,$args){
 		/*
 		convert csv to array.
 		*/
-		$data 	= $this->csv_to_array(trim($data), $delimiter, $enclosure, $escape,$terminator);
+		$data 	= $this->csv_to_array(trim($data), $delimiter, $enclosure, $escape, $terminator, $limit);
 	}
 	
 	if(empty($data)) return false;
@@ -212,8 +258,15 @@ private function csv_to_table($data,$args){
 	* @since 0.4
 	*/
 	$tfpos = ($tf == 'last') ? count($data) : ($th?2:1);
+	
+	/**
+	* add auto width
+	* @since 1.1.3
+	*/	
 
-	$width = (stripos($width,'%') === false) ? (int)$width.'px' : (int)$width.'%';
+	if ( 'auto' !== $width ) {
+ 		$width = (stripos($width,'%') === false) ? (int)$width.'px' : (int)$width.'%';
+ 	}
 	
 	/*colalign & colwidth
 	@since 1.0
@@ -225,14 +278,30 @@ private function csv_to_table($data,$args){
 	    $c_width = explode('|',$colwidth);
 	}
 	
-	$margin_left = $margin_right = 0;
+	/* added back $align, with new way of implementation, 
+	* @since 1.4
+	*/
+	$style = rtrim($style, ';');
+	switch ($align) :
+		case 'center':
+			$alignstyle = '; margin-left:auto;margin-right:auto';
+		break;
+		case 'right':
+			$alignstyle = '; margin-left:auto;margin-right:0';
+		break;
+		default:
+			$alignstyle = '';
+		break;
+	endswitch; 
 	
-	if( 'center' == $align ) {
-		$margin_left = $margin_right = 'auto';
-	}
+	$style = $style.$alignstyle;
 	
-	$output = '<table '.($id ? 'id="'.$id.'"':'');
-	$output .= 'style="width:'.$width.';margin:'.$margin_top.' '.$margin_right.' '.$margin_bottom.' '.$margin_left.';'.$style.'"';
+	/* wrap with .table-responsive div, since 1.5 */
+	$output  = '<div class="table-responsive">';
+	$output .= '<table '.($id ? 'id="'.$id.'"':'');
+	
+	//$output .= ' width="'.$width.'" '; width attr not used, use style instead (see below) - since 1.1.3
+	$output .= ' style="'.((stripos($style,'width') === false) ? ('width:'.$width.';') : '').' '.ltrim($style,';').'" ';
 	$output .= ' class="easy-table easy-table-'.$theme.' '.($tablesorter ? 'tablesorter __sortlist__ ':'').$class.'" '.
 	(($border !=='0') ? 'border="'.$border.'"' : '').
 	'>'."\n";
@@ -276,7 +345,8 @@ ai head, text to shown in the table head row, default is No.
 			* Add attribute for each cell
 			* @since 0.5
 			*/
-			preg_match('/\['.$this->option('attrtag').' ([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)/',$cell,$matchattr);
+			//preg_match('/\['.$this->option('attrtag').' ([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)/',$cell,$matchattr);
+			preg_match('/\['.$this->option('attrtag').' ([^\\]]*)/',$cell,$matchattr);
 			$attr = isset($matchattr[1]) ? $matchattr[1] : '';
 				/**
 				* extract $attr value
@@ -320,9 +390,13 @@ ai head, text to shown in the table head row, default is No.
 			$cell  = $trim ? trim(str_replace('&nbsp;','',$cell)) : $cell;
 			
 			/*nl2br? only if terminator is not \n or \r*/
-			if(( '\n' !== $terminator )  OR ( '\r' !== $terminator )) {
-				$cell = nl2br($cell);
-			}	
+			/* optionally, if $fixlinebreak is set. @since 1.1.4 */
+			
+			if ( $fixlinebreak ) {
+				if(( '\n' !== $terminator )  OR ( '\r' !== $terminator )) {
+					$cell = nl2br($cell);
+				}
+			}
 			/*colalign
 			 @since 1.0
 			 */
@@ -356,7 +430,7 @@ ai head, text to shown in the table head row, default is No.
 		$output .= (($r==$tfpos) AND $tf) ? '</tfoot>'.((($tf==1) AND !$th) ? '<tbody>':''): '';
 		
 	}
-	$output .= (($tf!=='last')?'</tbody>':'').'</table>';
+	$output .= (($tf!=='last')?'</tbody>':'').'</table></div>';
 	
 	/** 
 	* Build sortlist metadata and append it to the table class
@@ -755,6 +829,12 @@ settings_fields('easy_table_option_field');
 			'type'			=> 'text',
 			'description'	=> __('Table border (may be overriden by CSS)','easy-table'),
 			'value'			=> $this->option('border'))
+		,Array(
+			'name'			=>'easy_table_plugin_option[align]',
+			'label'			=> __('Table align','easy-table'),
+			'type'			=> 'text',
+			'description'	=> __('Table align (left, center, right)','easy-table'),
+			'value'			=> $this->option('align'))
 	);
 	?>	
 
@@ -838,6 +918,13 @@ settings_fields('easy_table_option_field');
 			'value'			=> $this->option('escape'),
 			'description'	=>__('CSV escape (default is backslash)','easy-table'))
 		,Array(
+			'name'			=> 'easy_table_plugin_option[fixlinebreak]',
+			'label'			=> __('Fix linebreak','easy-table'),
+			'type'			=> 'checkbox',
+			'value'			=> 1,
+			'description'	=> __('If terminator is not default (linebreak), you may encounter some issue with linebreak inside cell, try to check or uncheck this to resolve','easy-table'),
+			'attr'			=> $this->option('fixlinebreak') ? 'checked="checked"' : '')
+		,Array(
 			'name'			=> 'easy_table_plugin_option[csvfile]',
 			'label'			=> __('Allow read CSV from file?','easy-table'),
 			'type'			=> 'checkbox',
@@ -866,7 +953,7 @@ no,head1,head2,head3,head4
 [/table]	';
 $tableexample = $defaulttableexample;
 if(isset($_POST['test-easy-table'])){
-	$tableexample = $_POST['easy-table-test-area'];
+	$tableexample = strip_tags($_POST['easy-table-test-area'],'<p><a><img>');
 }
 
 if(isset($_POST['test-easy-table-reset'])){
@@ -988,53 +1075,7 @@ col4,col5,col6
 	</div>
 
 <?php elseif($_GET['gettab'] == 'support') : ?>
-<p><?php _e('I have tried to make this plugin can be used as easy as possible and documentation as complete as possible. However it is also possible that you are still confused. Therefore feel free to ask. I would be happy to answer.','easy-table');?></p>
-<p><?php _e('You can use this discussion to get support, request feature or reporting bug.','easy-table');?></p>
-<p><a target="_blank" href="http://takien.com/plugins/easy-table"><?php _e('Before you ask something, make sure you have read documentation here!','easy-table');?></a></p>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-/* <![CDATA[ */
-    var disqus_url = 'http://takien.com/1126/easy-table-is-the-easiest-way-to-create-table-in-wordpress.php';
-    var disqus_identifier = '1126 http://takien.com/?p=1126';
-    var disqus_container_id = 'disqus_thread';
-    var disqus_domain = 'disqus.com';
-    var disqus_shortname = 'takien';
-    var disqus_title = "Easy Table is The Easiest Way to Create Table in WordPress";
-        var disqus_config = function () {
-        var config = this; 
-        config.callbacks.preData.push(function() {
-            // clear out the container (its filled for SEO/legacy purposes)
-            document.getElementById(disqus_container_id).innerHTML = '';
-        });
-                config.callbacks.onReady.push(function() {
-            // sync comments in the background so we don't block the page
-            DISQUS.request.get('?cf_action=sync_comments&post_id=1126');
-        });
-                    };
-    var facebookXdReceiverPath = 'http://takien.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
-/* ]]> */
-</script>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-    var DsqLocal = {
-        'trackbacks': [
-        ],
-        'trackback_url': "http:\/\/takien.com\/1126\/easy-table-is-the-easiest-way-to-create-table-in-wordpress.php\/trackback"    };
-/* ]]> */
-</script>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
-    dsq.async = true;
-        dsq.src = 'http' + '://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.72';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-/* ]]> */
-</script>
+<p>To ask question, please visit this plugin support on WordPress.org</p>
 <?php elseif ($_GET['gettab'] == 'about') : ?>
 <?php
 require_once(ABSPATH.'wp-admin/includes/plugin-install.php');
@@ -1127,6 +1168,7 @@ $api = plugins_api('plugin_information', array('slug' => 'easy-table' ));
 <li>CSS <?php _e('by','easy-table');?> <a target="_blank" href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a></li>
 <li>jQuery metadata <?php _e('by','easy-table');?> <a target="_blank" href="https://github.com/jquery/jquery-metadata/">John Resig</a></li>
 <li>CuscoSky table styles <?php _e('by','easy-table');?> <a target="_blank" href="http://www.buayacorp.com">Braulio Soncco</a></li>
+<li>Tablesorter updated version <?php _e('by','easy-table');?> <a target="_blank" href="https://github.com/Mottie/tablesorter">Rob Garrison</a></li>
 
 </ul>
 		<?php endif; ?>
@@ -1152,7 +1194,7 @@ function easy_table_init() {
 * Use dedicated str_getcsv since 1.1
 */	
 if (!function_exists('easy_table_str_getcsv')) {
-	function easy_table_str_getcsv($input, $delimiter = ",", $enclosure = '"', $escape = "\\"){
+	function easy_table_str_getcsv($input, $delimiter = ",", $enclosure = '"', $escape = '\\'){
 		
 		/** 
 		* Bug fix, custom terminator wont work
@@ -1164,6 +1206,8 @@ if (!function_exists('easy_table_str_getcsv')) {
 			$input = str_replace("\n",'NLINEBREAK',$input);
 			$input = str_replace("\r",'RLINEBREAK',$input);
 		}
+		$input = str_ireplace( $escape.$delimiter,'_ESCAPED_SEPATATOR_',$input );
+		
 		$fiveMBs = 5 * 1024 * 1024;
 		if (($handle = fopen("php://temp/maxmemory:$fiveMBs", 'r+')) !== FALSE) {
 		fputs($handle, $input);
@@ -1175,13 +1219,14 @@ if (!function_exists('easy_table_str_getcsv')) {
 		*/
 		
 		$option = get_option('easy_table_plugin_option');
-		$limit  = !empty($option['limit']) ? (int)$option['limit'] : 2000;
-		while (($data = @fgetcsv($handle, $limit, $delimiter, $enclosure)) !== FALSE) {
+		$limit  = !empty($option['limit']) ? (int)$option['limit'] : 2000000;
+		while (($data = @fgetcsv( $handle, $limit, $delimiter )) !== FALSE) {
 			$num = count($data);
 			for ($c=0; $c < $num; $c++) {
 				$line++;
 				$data[$c] = str_replace('NLINEBREAK',"\n",$data[$c]);
 				$data[$c] = str_replace('RLINEBREAK',"\r",$data[$c]);
+				$data[$c] = str_replace('_ESCAPED_SEPATATOR_',$delimiter,$data[$c]);
 				$return[$line] = $data[$c];
 			}
 		}
